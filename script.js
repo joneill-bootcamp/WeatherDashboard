@@ -1,6 +1,6 @@
 // Define the URL's
 var weatherQueryURL = "https://api.openweathermap.org/data/2.5/weather?q=";
-var forecastQueryURL = "https://api.openweathermap.org/data/2.5/forecast?q=";
+let forecastQueryURL = "https://api.openweathermap.org/data/2.5/forecast?q=";
 var uviQueryURL = "https://api.openweathermap.org/data/2.5/uvi?";
 
 // Set up the API key
@@ -116,15 +116,39 @@ function renderWeather(city) {
 
     // Call forecastQueryURL
     $.ajax({
-            url: forecastQueryURL + city + "&appid=" + APIkey + "&units=metric",
+            url: forecastQueryURL + city + "&units=metric" + "&APPID=" + APIkey,
             method: "GET"
 
         }).then(function (response) {
             console.log("5 day");
             console.log(response);
+
+            // Count 1 through 5 and update each card in 5 day forceast accordingly
+            for (var i = 1; i <= 5; i++) {
+                // Get ID of a card 
+                var aCard = $("#" + i + "day"); // cards have an ID that goes 1day, 2day, 3day, 4day, 5day in index.html
+
+                // Display date in header component
+                // Use the .find method to obtain handle of named child class 
+                aCard.find(".card-header-title").text(moment()
+                    .utc()
+                    .add(response.city.timezone, "s")
+                    .add(i, "d")
+                    .format("DD/MM/YYYY"));
+
+                // Dynamically add <p> tags with remaining data to card-content
+                var aImage = $("<img>");
+                var aParagraph = $("<p>");
+                /*aImage.attr("src", "http://openweathermap.org/img/wn/" +
+                    iconDay[Math.floor(iconDay.length / 2)] + ".png") */
+                aParagraph.text("hello");
+                aCard.find(".card-content").append(aParagraph);
+
+
+            }
         })
         .catch(function (error) {
-
+            console.log(error);
         });
 }
 
