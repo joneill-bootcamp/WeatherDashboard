@@ -61,7 +61,11 @@ function renderWeather(city) {
             var coordinates = response.coord;
 
             // Display primary weather data
-            $("#cityName").text(response.name);
+            $("#cityName").text(response.name + ", " + response.sys.country);
+            $("#icon").attr("src", "http://openweathermap.org/img/wn/" + response.weather[0].icon + ".png");
+            $("#temperature").text("Temperature: " + response.main.temp.toFixed(0) + " c");
+            $("#humidity").text("Humidity:    " + response.main.humidity + " %");
+            $("#wind").text("Wind Speed:  " + response.wind.speed + " m/sec");
 
             // Call uviQueryURL
             $.ajax({
@@ -71,6 +75,35 @@ function renderWeather(city) {
                 }).then(function (response) {
                     console.log("UVI ");
                     console.log(response);
+                    // Set the UV Display colour depending on rating
+                    // Sourced from https://www.skincancercentres.com.au/blog/what-is-the-uv-index-and-what-does-it-mean
+                    var uvIndex = response.value;
+                    var colour = "";
+                    var narrative = "";
+                    switch (true) {
+                        case uvIndex <= 2:
+                            colour = "green";
+                            narrative = "No Protection required"
+                            break;
+                        case uvIndex >= 3 && uvIndex <= 5:
+                            colour = "yellow";
+                            narrative = "Protection Required";
+                            break;
+                        case uvIndex >= 6 && uvIndex <= 7:
+                            colour = " orange";
+                            narrative = "Protection Required";
+                            break;
+                        case uvIndex >= 8 && uvIndex <= 10:
+                            colour = "red";
+                            narrative = "Extra Protection Required";
+                            break;
+                        case uvIndex >= 11:
+                            colour = "violet";
+                            narrative = "Extra Protection Required";
+                            break;
+                    }
+                    $("#uvIndex").text(" " + uvIndex + ", " + narrative);
+                    $("#uvIndex").css("background-color", colour);
                 })
                 .catch(function (error) {
                     console.log("Got error");
