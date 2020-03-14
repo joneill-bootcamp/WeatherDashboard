@@ -4,7 +4,7 @@ var forecastQueryURL = "https://api.openweathermap.org/data/2.5/forecast?q=";
 var uviQueryURL = "https://api.openweathermap.org/data/2.5/uvi?";
 
 // Set up the API key
-var APIkey = "b6287be4ebab18736c328d82d49a11bb";
+var APIkey = "b6287be4ebab18736c328d82d49a11bb"; // My API key 
 
 // load local storage object for recent searched cities
 var recentCities = JSON.parse(localStorage.getItem("recentCities")) || [];
@@ -45,7 +45,6 @@ function renderRecentCities() {
     });
 }
 
-
 function renderWeather(city) {
 
     // Call weatherQueryURL
@@ -56,7 +55,14 @@ function renderWeather(city) {
         }).then(function (response) {
             console.log("Current");
             console.log(response);
+
+            // For the UVI Query, we need Longtitude and Latitude, nest AJAX call as information is only for a valid city and he coordinates
+            // are therefore contained only in the response object
             var coordinates = response.coord;
+
+            // Display primary weather data
+            $("#cityName").text(response.name);
+
             // Call uviQueryURL
             $.ajax({
                     url: uviQueryURL + city + "&appid=" + APIkey + "&units=metric" + "&lat=" + coordinates.lat + "&lon=" + coordinates.lon,
@@ -100,8 +106,10 @@ $("#searchButton").on("click", function () {
             method: "GET"
         })
         .then(function (response) {
-            // Push city onto arry of recentCities
-            recentCities.push(city);
+            // Push city onto arry of recentCities, but ONLY if the city is not already in the list!
+            if (!recentCities.includes(city)) {
+                recentCities.push(city);
+            }
 
             // Render list of buttons
             renderRecentCities();
