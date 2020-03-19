@@ -25,10 +25,11 @@ That's it, a simple Weather Site that works on your desktop or your mobile devic
 ## Technology
 
 - HTML 5
-- BootStrap 4.0.0
+- Bulma CSS
 - Responsive Pages
+- AJAX
+- JQUERY
 - Cards
-- Timer Interval
 
 ## Team
 
