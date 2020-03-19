@@ -123,6 +123,7 @@ function renderWeather(city) {
             console.log("5 day");
             console.log(response);
 
+
             // Count 1 through 5 and update each card in 5 day forceast accordingly
             for (var i = 1; i <= 5; i++) {
                 // Get ID of a card 
@@ -138,11 +139,57 @@ function renderWeather(city) {
 
                 // Dynamically add <p> tags with remaining data to card-content
                 var aImage = $("<img>");
-                var aParagraph = $("<p>");
+                var tempParagraph = $("<p>");
+                var humidityParagraph = $("<p>");
+
                 /*aImage.attr("src", "http://openweathermap.org/img/wn/" +
                     iconDay[Math.floor(iconDay.length / 2)] + ".png") */
-                aParagraph.text("hello");
-                aCard.find(".card-content").append(aParagraph);
+
+                // Clear paragraphs and image
+                // tempParagraph.clear();
+                // humidityParagraph.clear();
+                // aImage.clear();
+
+                // This bit is ugly, basically there are 40 elements for 5 days, 0 throuh 39
+                // Element 7 will be day 1
+                // Element 15 will be day 2
+                // Element 23 will be day 3
+                // Element 31 will be day 4
+                // Element 39 will be day 5
+
+                switch (i) {
+                    case 1:
+                        //aImage
+                        tempParagraph.text("Temp:" + response.list[7].main.temp);
+                        humidityParagraph.text("Hum :" + response.list[7].main.humidity);
+                        break;
+                    case 2:
+                        //aImage
+                        tempParagraph.text("Temp:" + response.list[15].main.temp);
+                        humidityParagraph.text("Hum :" + response.list[15].main.humidity);
+                        break;
+                    case 3:
+                        //aImage
+                        tempParagraph.text("Temp:" + response.list[23].main.temp);
+                        humidityParagraph.text("Hum :" + response.list[23].main.humidity);
+                        break;
+                    case 4:
+                        //aImage
+                        tempParagraph.text("Temp:" + response.list[31].main.temp);
+                        humidityParagraph.text("Hum :" + response.list[31].main.humidity);
+                        break;
+                    case 5:
+                        //aImage
+                        tempParagraph.text("Temp:" + response.list[39].main.temp);
+                        humidityParagraph.text("Hum :" + response.list[39].main.humidity);
+                        break;
+
+                }
+
+                // Add content to paragraph
+                aCard.find(".card-content").empty();
+                aCard.find(".card-content").append(tempParagraph);
+                aCard.find(".card-content").append(humidityParagraph);
 
 
             }
@@ -151,6 +198,8 @@ function renderWeather(city) {
             console.log(error);
         });
 }
+
+
 
 // Set up search of click event on search box
 $("#searchButton").on("click", function () {
